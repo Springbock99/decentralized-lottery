@@ -1,0 +1,20 @@
+[profile.default]
+src = "contracts"
+out = "out"
+libs = ["lib"]
+test = "test"
+solc_version = "0.8.25"
+evm_version = "shanghai" 
+optimizer_runs = 800 
+ffi = true # double check if we wanna use this? 
+ast = true # double check if we wanna use this? 
+build_info = true
+extra_output = ["storageLayout"] # double check if we wanna use this? 
+incremental = true 
+auto_detect_solc = true # double check if we wanna use this? 
+
+[fuzz]
+runs = 50_000
+seed = '0x42' # double check if we wanna use this or another value? 
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
