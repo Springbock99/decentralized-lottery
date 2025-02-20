@@ -108,7 +108,10 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
         }
     }
 
-    function supplyToken(address _user, uint256 _amount) external {
+    function supplyToken(
+        address _user,
+        uint256 _amount
+    ) external returns (uint256) {
         updateState();
         if (token.balanceOf(_user) < _amount) revert InsufficientBalance();
         if (currentState != LotteryState.TicketSaleOpen) revert NotOpen();
@@ -125,6 +128,7 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
             ticketNumber[msg.sender].push(ticketCounter); // Add the ticket to the user's list.
             ticketOwner[ticketCounter] = msg.sender; // Map the ticket number to the user.
         }
+        return ticketCounter;
     }
 
     function pickWinner() external onlyOwner {
@@ -163,6 +167,24 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
         );
         // double check if this function has to be only owner.
         // variable of the winning nr.
+    }
+
+    // let' users check how many ticket they have.
+    function getTicketCount(address _user) external view returns (uint256) {
+        return ticketNumber[_user].length;
+    }
+
+    function getTicketBalance(
+        address _user
+    ) external view returns (uint256[] memory) {
+        return ticketNumber[_user];
+    }
+
+    function hasTicket(
+        address _user,
+        uint256 _ticketNumber
+    ) external view returns (bool) {
+        return ticketOwner[_ticketNumber] == _user;
     }
 
     function checkLotteryNr() external view returns (uint256) {
