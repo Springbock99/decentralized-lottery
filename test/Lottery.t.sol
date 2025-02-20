@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
-import "forge-std/Test.sol";
-import {Test, console2} from "forge-std/Test.sol";
+pragma solidity ^0.8.25;
+import {Test, Vm, console} from "forge-std/Test.sol";
 import {Lottery} from "../contracts/Lottery.sol";
 import {MockToken} from "../contracts/MockToken.sol";
 import {MockVRFCoordinator} from "../contracts/MockVRFCoordinator.sol";
@@ -53,6 +52,23 @@ contract LotteryTest is Test {
         token.mint(user1, INITIAL_BALANCE);
         token.mint(user2, INITIAL_BALANCE);
 
+        StdUtils.deal(
+            address(0x514910771AF9Ca656af840dff83E8264EcF986CA),
+            user1,
+            1 ether
+        );
+
+        uint256 balanceUser1 = token.balanceOf(user1);
+        console.log("balance of user1:", balanceUser1);
+
+        vm.stopPrank();
+
+        vm.startPrank(user1);
+        token.approve(address(this), INITIAL_BALANCE);
+        vm.stopPrank();
+
+        vm.startPrank(user2);
+        token.approve(address(this), INITIAL_BALANCE);
         vm.stopPrank();
     }
 
@@ -68,12 +84,21 @@ contract LotteryTest is Test {
         );
     }
 
-    // function test_SimpleSupply() public {
-    //     vm.startPrank(user1);
-    //     lottery.supplyToken(user1, 100);
+    function test_GetTicketCount() public {
+        uint256 BalanceOfUser1 = token.balanceOf(user1);
+        console.log("balance of user1:", BalanceOfUser1);
 
-    //     uint256 lotterBalance = Lottery.getBalance(address(this));
+        vm.prank(user1);
 
-    //     assertEq(lotterBalance, 100);
-    // }
+        uint256 firstSupply = lottery.supplyToken(user1, 300);
+        console.log("tokens supplied:", firstSupply);
+
+        uint256[] memory tickets = lottery.getTicketBalance(user1);
+
+        assertEq(tickets.length, 3);
+
+        assertEq(tickets[0], 1);
+        assertEq(tickets[1], 1);
+        assertEq(tickets[2], 1);
+    }
 }
