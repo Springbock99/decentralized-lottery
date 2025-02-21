@@ -2,13 +2,9 @@
 pragma solidity ^0.8.25;
 import {Test, Vm, console} from "forge-std/Test.sol";
 import {Lottery} from "../contracts/Lottery.sol";
-import {MockToken} from "../contracts/MockToken.sol";
-import {MockVRFCoordinator} from "../contracts/MockVRFCoordinator.sol";
 
 contract LotteryTest is Test {
     Lottery public lottery;
-    MockToken public token;
-    MockVRFCoordinator public vrfCoordinator;
 
     address public owner;
     address public user1;
@@ -29,12 +25,6 @@ contract LotteryTest is Test {
 
         vm.startPrank(owner);
 
-        // Deploy mock token first
-        token = new MockToken("Mock LINK", "mLINK");
-        console.log("MockToken deployed at:", address(token));
-
-        // Deploy mock VRF coordinator with the token address
-        vrfCoordinator = new MockVRFCoordinator(address(token));
         console.log("VRFCoordinator deployed at:", address(vrfCoordinator));
 
         // Deploy lottery

@@ -1,7 +1,7 @@
 [profile.default]
 src = "contracts"
 out = "out"
-libs = ["lib"]
+libs = ["dependencies"]
 test = "test"
 solc_version = "0.8.25"
 evm_version = "shanghai" 
@@ -12,9 +12,35 @@ build_info = true
 extra_output = ["storageLayout"] # double check if we wanna use this? 
 incremental = true 
 auto_detect_solc = true # double check if we wanna use this? 
+fork_url = "<https://eth-mainnet.g.alchemy.com/v2/zNMGaVTfo_oc5Wngx6AQHIKUhcTXsCJD>"
+
+# remappings = [
+#     "@chainlink-contracts-1.3.0/=dependencies/@chainlink-contracts-1.3.0/src/",
+#     "@openzeppelin-contracts-5.2.0/=dependencies/@openzeppelin-contracts-5.2.0/",
+#     "@openzeppelin-contracts-upgradeable/=dependencies/@oppenzeppelin-contracts-upgradeable-5.2.0/",
+#     "@forge-std/=dependencies/forge-std-1.9.6/src/"
+# ]
+
+
 
 [fuzz]
 runs = 50_000
 seed = '0x42' # double check if we wanna use this or another value? 
+
+
+
+
+[dependencies]
+"@chainlink-contracts" = "1.3.0"
+"@openzeppelin-contracts" = "5.2.0"
+"@openzeppelin-contracts-upgradeable" = "5.2.0"
+forge-std = "1.9.6"
+# forge-std = "1.9.6"
+# "@chainlink-contracts" = "1.3.0"
+# "@openzeppelin-contracts" = "5.2.0"
+# "@openzeppelin-contracts-upgradeable" = "5.2.0"
+
+
+
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
