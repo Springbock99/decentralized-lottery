@@ -4,11 +4,11 @@ pragma solidity ^0.8.25;
 // ownable2Step and erc-20/Ierc20;
 import {Ownable2Step, Ownable} from "@openzeppelin-contracts-5.2.0/access/Ownable2Step.sol";
 import {IERC20} from "@openzeppelin-contracts-5.2.0/token/ERC20/IERC20.sol";
-import {ChainlinkClient} from "@chainlink-contract-1.3.0/v0.8/ChainlinkClient.sol";
-import {VRFV2WrapperConsumerBase} from "@chainlink-contracts-1.3.0/vrf/VRFV2WrapperConsumerBase.sol";
-import {VRFV2PlusWrapperConsumerBase} from "@chainlink-contracts-1.3.0/vrf/dev/VRFV2PlusWrapperConsumerBase.sol";
-import {VRFV2PlusClient} from "@chainlink-contracts-1.3.0/vrf/dev/libraries/VRFV2PlusClient.sol";
-import {LinkTokenInterface} from "@chainlink-contracts-1.3.0/shared/interfaces/LinkTokenInterface.sol";
+import {ChainlinkClient} from "@chainlink-contracts-1.3.0/v0.8/ChainlinkClient.sol";
+import {VRFV2WrapperConsumerBase} from "@chainlink-contracts-1.3.0/v0.8/vrf/VRFV2WrapperConsumerBase.sol";
+import {VRFV2PlusWrapperConsumerBase} from "@chainlink-contracts-1.3.0/v0.8/vrf/dev/VRFV2PlusWrapperConsumerBase.sol";
+import {VRFV2PlusClient} from "@chainlink-contracts-1.3.0/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
+import {LinkTokenInterface} from "@chainlink-contracts-1.3.0/v0.8/shared/interfaces/LinkTokenInterface.sol";
 
 contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
     error InsufficientBalance();

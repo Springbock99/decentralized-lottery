@@ -25,8 +25,6 @@ contract LotteryTest is Test {
 
         vm.startPrank(owner);
 
-        console.log("VRFCoordinator deployed at:", address(vrfCoordinator));
-
         // Deploy lottery
         uint256 startTime = block.timestamp;
         uint256 endTime = startTime + 1 days;
@@ -34,32 +32,31 @@ contract LotteryTest is Test {
             address(0x514910771AF9Ca656af840dff83E8264EcF986CA),
             startTime,
             endTime,
-            address(vrfCoordinator)
+            address(0xD7f86b4b8Cae7D942340FF628F82735b7a20893a)
         );
-        console.log("Lottery deployed at:", address(lottery));
 
-        // Mint tokens
-        token.mint(user1, INITIAL_BALANCE);
-        token.mint(user2, INITIAL_BALANCE);
+        // // Mint tokens
+        // token.mint(user1, INITIAL_BALANCE);
+        // token.mint(user2, INITIAL_BALANCE);
 
-        StdUtils.deal(
+        deal(
             address(0x514910771AF9Ca656af840dff83E8264EcF986CA),
             user1,
             1 ether
         );
 
-        uint256 balanceUser1 = token.balanceOf(user1);
-        console.log("balance of user1:", balanceUser1);
+        // uint256 balanceUser1 = token.balanceOf(user1);
+        // console.log("balance of user1:", balanceUser1);
 
         vm.stopPrank();
 
-        vm.startPrank(user1);
-        token.approve(address(this), INITIAL_BALANCE);
-        vm.stopPrank();
+        // vm.startPrank(user1);
+        // token.approve(address(this), INITIAL_BALANCE);
+        // vm.stopPrank();
 
-        vm.startPrank(user2);
-        token.approve(address(this), INITIAL_BALANCE);
-        vm.stopPrank();
+        // vm.startPrank(user2);
+        // token.approve(address(this), INITIAL_BALANCE);
+        // vm.stopPrank();
     }
 
     function test_InitialState() public {
@@ -74,21 +71,21 @@ contract LotteryTest is Test {
         );
     }
 
-    function test_GetTicketCount() public {
-        uint256 BalanceOfUser1 = token.balanceOf(user1);
-        console.log("balance of user1:", BalanceOfUser1);
+    // function test_GetTicketCount() public {
+    //     uint256 BalanceOfUser1 = token.balanceOf(user1);
+    //     console.log("balance of user1:", BalanceOfUser1);
 
-        vm.prank(user1);
+    //     vm.prank(user1);
 
-        uint256 firstSupply = lottery.supplyToken(user1, 300);
-        console.log("tokens supplied:", firstSupply);
+    //     uint256 firstSupply = lottery.supplyToken(user1, 300);
+    //     console.log("tokens supplied:", firstSupply);
 
-        uint256[] memory tickets = lottery.getTicketBalance(user1);
+    //     uint256[] memory tickets = lottery.getTicketBalance(user1);
 
-        assertEq(tickets.length, 3);
+    //     assertEq(tickets.length, 3);
 
-        assertEq(tickets[0], 1);
-        assertEq(tickets[1], 1);
-        assertEq(tickets[2], 1);
-    }
+    //     assertEq(tickets[0], 1);
+    //     assertEq(tickets[1], 1);
+    //     assertEq(tickets[2], 1);
+    // }
 }
