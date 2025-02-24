@@ -137,7 +137,6 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
         bytes memory extra;
         updateState();
         if (currentState != LotteryState.LotteryClosed) revert LotteryActive();
-
         requestRandomness(
             callbackGasLimit,
             requestConfirmations,
