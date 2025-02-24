@@ -100,7 +100,7 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
 
     // functions
 
-    function updateState() internal {
+    function updateState() public {
         if (
             block.timestamp >= saleStartTime && block.timestamp <= saleEndTime
         ) {
