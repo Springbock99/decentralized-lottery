@@ -2,6 +2,7 @@
 pragma solidity ^0.8.25;
 import {Test, Vm, console} from "forge-std/Test.sol";
 import {Lottery} from "../contracts/Lottery.sol";
+import {Ownable2Step, Ownable} from "@openzeppelin-contracts-5.2.0/access/Ownable2Step.sol";
 import {IERC20} from "@openzeppelin-contracts-5.2.0/token/ERC20/IERC20.sol";
 
 contract LotteryTest is Test {
@@ -29,7 +30,6 @@ contract LotteryTest is Test {
 
         vm.startPrank(owner);
 
-        // Deploy lottery
         uint256 startTime = block.timestamp;
         uint256 endTime = startTime + 1 days;
         lottery = new Lottery(
@@ -39,19 +39,12 @@ contract LotteryTest is Test {
             address(chainLinkVRFWrapper)
         );
 
-        // // Mint tokens
-        // token.mint(user1, INITIAL_BALANCE);
-        // token.mint(user2, INITIAL_BALANCE);
-
         deal(address(link), user1, 1 ether);
+        deal(address(link), user2, 1 ether);
 
         uint256 balanceOfUser1 = IERC20(
             0x514910771AF9Ca656af840dff83E8264EcF986CA
         ).balanceOf(user1);
-
-        console.log("balance of user1", balanceOfUser1);
-        // uint256 balanceUser1 = token.balanceOf(user1);
-        // console.log("balance of user1:", balanceUser1);
 
         vm.stopPrank();
 
@@ -64,13 +57,17 @@ contract LotteryTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user2);
-        link.approve(address(this), 1 ether);
+        link.approve(address(lottery), 1 ether);
+        console.log(
+            "Allowance for Lottery:",
+            link.allowance(user2, address(lottery))
+        );
+        vm.stopPrank();
+
         vm.stopPrank();
     }
 
     function test_InitialState() public {
-        // Your test code here
-
         uint256 test = lottery.token().totalSupply();
 
         console.log("tokens", test);
@@ -102,12 +99,52 @@ contract LotteryTest is Test {
         vm.expectRevert(
             abi.encodeWithSelector(Lottery.InsufficientBalance.selector)
         );
-        lottery.supplyToken(user1, 2 ether); // More than user1's balance (1 ether)
+        lottery.supplyToken(user1, 2 ether);
     }
 
     function test_Supply0Tokens() public {
         vm.prank(user1);
         vm.expectRevert(abi.encodeWithSelector(Lottery.AmountZero.selector));
         lottery.supplyToken(user1, 0);
+    }
+
+    function test_FailSupplyWehnTokenClosed() public {
+        vm.warp(lottery.saleEndTime() + 1);
+        lottery.updateState();
+        vm.prank(user1);
+        vm.expectRevert(abi.encodeWithSelector(Lottery.NotOpen.selector));
+        lottery.supplyToken(user1, 300);
+    }
+
+    function test_MultipleUsersBuyTickets() public {
+        vm.prank(user1);
+        lottery.supplyToken(user1, 300);
+
+        vm.prank(user2);
+        lottery.supplyToken(user2, 500);
+
+        assertEq(lottery.getTicketCount(user1), 3);
+        assertEq(lottery.getTicketCount(user2), 5);
+        assertEq(lottery.ticketCounter(), 8);
+
+        uint256 lotteryBalance = link.balanceOf(address(lottery));
+        assertEq(lotteryBalance, 800);
+    }
+
+    function test_PickWinnerOnlyOwner() public {
+        vm.warp(lottery.saleEndTime() + 1);
+        lottery.updateState();
+
+        vm.prank(user1);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                Ownable.OwnableUnauthorizedAccount.selector,
+                user1
+            )
+        );
+        lottery.pickWinner();
+
+        vm.prank(owner);
+        lottery.pickWinner();
     }
 }

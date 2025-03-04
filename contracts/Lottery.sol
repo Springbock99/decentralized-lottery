@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
-// ownable2Step and erc-20/Ierc20;
 import {Ownable2Step, Ownable} from "@openzeppelin-contracts-5.2.0/access/Ownable2Step.sol";
 import {IERC20} from "@openzeppelin-contracts-5.2.0/token/ERC20/IERC20.sol";
 import {ChainlinkClient} from "@chainlink-contracts-1.3.0/v0.8/ChainlinkClient.sol";
@@ -16,9 +15,6 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
     error AmountZero();
     error LotteryActive();
     error NotTheWinner();
-
-    // constructor that inizializes a token or maybe not so many tokens could be used
-    // constructor ownable2 step
 
     IERC20 public immutable token;
     address public winner;
@@ -35,8 +31,7 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
 
     mapping(address => uint256[]) public ticketNumber;
     mapping(uint256 => address) public ticketOwner;
-    mapping(uint256 => RequestStatus)
-        public s_requests; /* requestId --> requestStatus */
+    mapping(uint256 => RequestStatus) public s_requests;
 
     enum LotteryState {
         TicketSaleOpen,
@@ -45,8 +40,8 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
     }
 
     struct RequestStatus {
-        uint256 paid; // amount paid in link
-        bool fulfilled; // whether the request has been successfully fulfilled
+        uint256 paid;
+        bool fulfilled;
         uint256[] randomWords;
     }
 
@@ -98,8 +93,6 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
         return requestId;
     }
 
-    // functions
-
     function updateState() public {
         if (
             block.timestamp >= saleStartTime && block.timestamp <= saleEndTime
@@ -124,11 +117,10 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
 
         uint256 ticketsToIssue = _amount / 100;
 
-        // Issue tickets by updating mappings.
         for (uint256 i = 0; i < ticketsToIssue; i++) {
-            ticketCounter++; // Generate a new unique ticket number.
-            ticketNumber[msg.sender].push(ticketCounter); // Add the ticket to the user's list.
-            ticketOwner[ticketCounter] = msg.sender; // Map the ticket number to the user.
+            ticketNumber[msg.sender].push(ticketCounter);
+            ticketOwner[ticketCounter] = msg.sender;
+            ticketCounter++;
         }
         return ticketCounter;
     }
@@ -149,28 +141,22 @@ contract Lottery is Ownable2Step, VRFV2PlusWrapperConsumerBase {
         uint256 /* _requestId*/,
         uint256[] memory randomWords
     ) internal override {
-        uint256 winningTicket = (randomWords[0] % ticketCounter) + 1;
+        uint256 winningTicket = (randomWords[0] % ticketCounter);
 
         winner = ticketOwner[winningTicket];
     }
 
-    function withdrawWinnings() external onlyOwner {
+    function withdrawWinnings() external {
         updateState();
         if (currentState != LotteryState.LotteryClosed) revert LotteryActive();
         if (msg.sender != winner) revert NotTheWinner();
-        // calculate the winnigs.
-        // make sure the user is the one with the winning ticket
-        // transfer funds that are in the contract.
+
         token.transferFrom(
             address(this),
             msg.sender,
             token.balanceOf(address(this))
         );
-        // double check if this function has to be only owner.
-        // variable of the winning nr.
     }
-
-    // let' users check how many ticket they have.
     function getTicketCount(address _user) external view returns (uint256) {
         return ticketNumber[_user].length;
     }
