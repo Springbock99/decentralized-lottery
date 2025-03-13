@@ -90,9 +90,9 @@ contract LotteryTest is Test {
 
         uint256[] memory tickets = lottery.getTicketBalance(user1);
         assertEq(tickets.length, 3);
-        assertEq(tickets[0], 1);
-        assertEq(tickets[1], 2);
-        assertEq(tickets[2], 3);
+        assertEq(tickets[0], 0);
+        assertEq(tickets[1], 1);
+        assertEq(tickets[2], 2);
     }
     function test_FailSupplyTokenInsufficientBalance() public {
         vm.prank(user1);
