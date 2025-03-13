@@ -20,11 +20,10 @@ The Lottery contract allows users to purchase tickets using LINK tokens during a
 - **Framework**: Foundry (for development, testing, and deployment)
 - **Dependencies**: OpenZeppelin Contracts, Chainlink Contracts
 - **Testing**: Foundry with mainnet forking via Alchemy
-- **Containerization**: Dockerized for consistent development and testing environments
 
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/yourusername/lottery.git`
 2. Install Foundry: Follow the instructions at [foundry.paradigm.xyz](https://foundry.paradigm.xyz).
-3. Set up your `.env` file with an Alchemy API key: `ALCHEMY_API_KEY=your_key_here`.
+3. Set up your `.env` file with an Alchemy API key: `ALCHEMY_URL=https://eth-mainnet.g.alchemy.com/v2/your_api_key`.
 4. Build and test: `forge build` and `forge test -vvv`.
