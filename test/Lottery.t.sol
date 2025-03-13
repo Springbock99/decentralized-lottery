@@ -8,6 +8,8 @@ import {IERC20} from "@openzeppelin-contracts-5.2.0/token/ERC20/IERC20.sol";
 contract LotteryTest is Test {
     Lottery public lottery;
 
+    string ALCHEMY_URL;
+
     address public owner;
     address public user1;
     address public user2;
@@ -23,6 +25,8 @@ contract LotteryTest is Test {
         owner = makeAddr("owner");
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
+
+        ALCHEMY_URL = vm.envString("ALCHEMY_URL");
 
         vm.createSelectFork(
             "https://eth-mainnet.g.alchemy.com/v2/zNMGaVTfo_oc5Wngx6AQHIKUhcTXsCJD"
