@@ -1,29 +1,51 @@
 # Lottery Smart Contract
 
-Welcome to the **Lottery** project! This is a decentralized, one-time-use lottery smart contract built on Ethereum using Solidity and powered by Chainlink VRF (Verifiable Random Function) for secure randomness. Designed as a learning exercise and proof-of-concept, this project demonstrates key blockchain concepts like token integration, state management, and automated testing.
+Welcome to the **Lottery** project! This is a decentralized, one-time-use lottery smart contract built on Ethereum using Solidity, powered by Chainlink VRF for secure randomness, and tested with Foundry. Created as a learning exercise by [Kent Daneel](https://github.com/Springbock99), this repository showcases blockchain development fundamentals and is open for contributions!
+
+---
 
 ## Overview
 
-The Lottery contract allows users to purchase tickets using LINK tokens during a predefined sale period. Once the sale ends, the contract owner can trigger a winner selection process using Chainlink VRF, ensuring a fair and tamper-proof draw. The winner can then claim the accumulated prize pool. This is a single-use lottery, meaning it runs one cycle (ticket sales, winner pick, and payout) and is not designed for multiple rounds—perfect for a focused experiment or a one-off event.
+The Lottery contract is designed for a single-use cycle: users purchase tickets with LINK tokens during a predefined sale period, the owner selects a winner using Chainlink VRF after the sale ends, and the winner claims the prize. Once the prize is distributed, the lottery concludes, making it ideal for a one-off event or a focused experiment in decentralized applications (dApps).
 
-## Features
+### Key Features
 
-- **Token-Based Tickets**: Users buy tickets with LINK tokens (priced at 100 wei per ticket).
-- **Chainlink VRF**: Utilizes Chainlink's VRF V2+ Wrapper for cryptographically secure randomness.
-- **State Management**: Tracks ticket sales, lottery state (Open, Closed), and the winner.
-- **Automated Testing**: Includes comprehensive Foundry tests, forking Ethereum mainnet for realistic simulation.
+- **Token-Based Tickets**: Users buy tickets using LINK tokens (100 wei per ticket).
+- **Chainlink VRF**: Ensures fair and tamper-proof winner selection with cryptographically secure randomness.
+- **State Management**: Tracks ticket sales, lottery state (Open/Closed), and the winner.
+- **Automated Testing**: Comprehensive Foundry tests, including mainnet forking via Alchemy.
 - **OpenZeppelin Integration**: Leverages Ownable2Step for secure ownership transfers.
+
+---
 
 ## Tech Stack
 
 - **Language**: Solidity (v0.8.25)
 - **Framework**: Foundry (for development, testing, and deployment)
-- **Dependencies**: OpenZeppelin Contracts, Chainlink Contracts
-- **Testing**: Foundry with mainnet forking via Alchemy
+- **Randomness**: Chainlink VRF V2+ Wrapper
+- **Package Manager**: Soldeer (for dependency management)
+- **Dependencies**:
+  - [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
+  - [Chainlink Contracts](https://github.com/smartcontractkit/chainlink)
+- **Testing**: Foundry with mainnet forking
+- **Version Control**: Git
+
+---
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/yourusername/lottery.git`
-2. Install Foundry: Follow the instructions at [foundry.paradigm.xyz](https://foundry.paradigm.xyz).
-3. Set up your `.env` file with an Alchemy API key: `ALCHEMY_URL=https://eth-mainnet.g.alchemy.com/v2/your_api_key`.
-4. Build and test: `forge build` and `forge test -vvv`.
+Follow these steps to set up and run the project locally.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v16 or later, if using the frontend)
+- [Foundry](https://book.getfoundry.sh/getting-started/installation) (installed via `foundryup`)
+- An Alchemy API key for Ethereum mainnet forking
+
+### Installation
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Springbock99/lottery.git
+   cd lottery
+   ```
