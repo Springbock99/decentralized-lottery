@@ -28,9 +28,7 @@ contract LotteryTest is Test {
 
         ALCHEMY_URL = vm.envString("ALCHEMY_URL");
 
-        vm.createSelectFork(
-            "https://eth-mainnet.g.alchemy.com/v2/zNMGaVTfo_oc5Wngx6AQHIKUhcTXsCJD"
-        );
+        vm.createSelectFork("https://eth-mainnet.g.alchemy.com/v2/ALCHEMY_URL");
 
         vm.startPrank(owner);
 
